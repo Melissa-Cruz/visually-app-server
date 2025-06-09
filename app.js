@@ -26,7 +26,9 @@ app.use(express.static(path.join(__dirname + "public")));
 
 //----------------------Get the Routes-------------------
 const timelineRoutes = require("./routes/timelineRoutes");
+const authRoutes = require("./routes/authRoutes");
 //Use the  Routes
+app.use ("/auth", authRoutes);
 app.use("/api/timelines",timelineRoutes );
 
 //Create six basic GET routes with the following information using the
