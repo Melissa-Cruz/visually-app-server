@@ -1,8 +1,12 @@
+require("dotenv").config();
+require("./config/connection");
+require("./config/authStrategy");
+
 // --------------------Initialize Express---------------
 //require dependencies and set up express environment
 const express = require("express");
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 8080;
 
 // --------------------Middleware------------------------
 //require dependencies
@@ -14,9 +18,9 @@ const cors = require("cors");
 const path = require("node:path");
 
 //use the packages
-app.use(cors());
-app.use(morgan("combined"));
 app.use(helmet());
+app.use(morgan("combined"));
+app.use(cors({credentials:true}));
 
 //Google what everything means again
 app.use(express.json());

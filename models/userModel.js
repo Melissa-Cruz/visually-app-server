@@ -38,4 +38,4 @@ const userSchema = new Schema(
 
 const User = mongoose("User", userSchema);
 
-module.exports 
+module.exports =User;
