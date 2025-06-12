@@ -6,9 +6,10 @@ const {getAllTimelines, getTimeline, createTimeline, updateTimeline, deleteTimel
 
 
 router.get(("/"), getAllTimelines); 
-router.get(("/:id"), getTimeline);
+router.get(("/:_id"), getTimeline);
+// router.get(("/"))
 router.post(("/create/new"), createTimeline);
-router.put(("/edit/:id"), updateTimeline); 
-router.delete(("/delete/:id"), deleteTimeline); 
+router.put(("/edit/:_id"), updateTimeline); 
+router.delete(("/delete/:_id"), deleteTimeline); 
 
 module.exports = router;

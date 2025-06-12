@@ -41,14 +41,14 @@ app.use ("/api", authRoutes);
 
 app.get("/", (req, res, next) => {
   res.status(200).json({
-    success: { message: "This route points to the Home page." },
+    success: { message: "This route points to the Home page.Yay" },
     // data: timelines,
   });
 });
 
 //catch any errors before the app fully boots up 
 app.use((err, req, res, next)=>{
-    if(err.code==1100){
+    if(err.code==11000){
       return res.status(err.status || 400).json({
         error:{message:"Already have an account? Try logging in."}, 
         statusCode:err.status || 400

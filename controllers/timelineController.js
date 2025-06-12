@@ -1,3 +1,4 @@
+const { Types } = require("mongoose");
 const Timeline = require("../models/timelineModel");
 
 // const timelineData = require("../data/timelines");
@@ -26,13 +27,14 @@ const getTimeline = async (req, res, next) => {
 
   try {
     // const timeline = timelineData.find((timeline) => timeline._id === _id);
+    console.log("I am inside the getTimeline app", _id);
 
     if(!_id){ 
         throw new Error("ID is required");
     }
 
-    const timeline=Timeline.findById(_id);
-    
+    const timeline= await Timeline.findById(_id);
+    console.log(timeline);
     if(!timeline){
         throw new Error("Timeline is not found");
     }
@@ -60,10 +62,10 @@ const createTimeline = async (req, res, next) => {
     timeline_start_date,
     timeline_steps,
     timeline_cover_image_url,
-
     moments,
   } = req.body;
 
+  console.log(req.body);
   try {
 
     if(!timeline_name || !timeline_description){
@@ -80,6 +82,7 @@ const createTimeline = async (req, res, next) => {
     });
 
     await newTimeline.save();
+    console.log(newTimeline);
 
     return res.status(201).json({
       success: { message: "A new timeline is created." },

@@ -8,4 +8,6 @@ async function main() {
         console.error(`There was an error connection to the database: ${error}`);
 
     }
-}
+}; 
+
+main();
