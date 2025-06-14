@@ -10,18 +10,18 @@ const passport = require("passport");
 
 router.post("/register", register);
 
-router.post("/login", 
-    passport.authenticate("local",{
-        failureRedirect:"/login/error",
-        failureMessage:true,
-    }),
-login);
+// router.post("/login", 
+//     passport.authenticate("local",{
+//         failureRedirect:"/login/error",
+//         failureMessage:true,
+//     }),
+// login);
 
 router.get("/login/error", (req, res, next) => {
   return res.json("login error");
 });
 
-router.get("/login/local", localLogin);
+router.post("/login/local", localLogin);
 
 router.get("/logout", logout);
 

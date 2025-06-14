@@ -6,10 +6,8 @@ const register = async (req, res, next) => {
   const { firstName, lastName, username, password } = req.body;
   console.log("register");
 
-  if (error) {
-    return next(error);
-  } else if (!firstName || username || !password) {
-    return response.status(400).json({
+ if (!firstName || !username || !password) {
+    return res.status(400).json({
       error: { message: "Missing required fields." },
       statusCode: 400,
     });
@@ -17,18 +15,18 @@ const register = async (req, res, next) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = {
+    const newUser = new User({
       firstName,
       lastName,
       username,
       password: hashedPassword,
       googleId: "",
-    };
+    });
 
     await newUser.save();
 
     req.login(newUser, (error) => {
-      if (err) {
+      if (error) {
         return next(error);
       }
       newUser.password = undefined;
@@ -97,12 +95,12 @@ const localLogin = async (req, res, next) => {
 
     // if no user detected
     if (!user) {
-      return response.status(401).json({
+      return res.status(401).json({
         error: { message: "There is not a user detected. Please try again" },
       });
     }
     //use the login method to confirm the user
-    request.login(user, (err) => {
+    req.login(user, (err) => {
       if (err) {
         return next(err);
       }
@@ -112,7 +110,7 @@ const localLogin = async (req, res, next) => {
 
       console.log(userCopy);
 
-      response.status(200).json({
+    res.status(200).json({
         success: {
           message: "Login successful within local authentication feature.",
         },

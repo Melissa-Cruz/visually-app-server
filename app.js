@@ -25,7 +25,6 @@ const PORT = process.env.PORT || 8080;
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-const passport = require("passport"); //not sure if this is right
 
 //require path after the dependencies
 const path = require("node:path");
