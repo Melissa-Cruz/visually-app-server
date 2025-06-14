@@ -21,7 +21,7 @@ const register = async (req, res, next) => {
     }
   
 
-  const newUser = { firstName, lastName, username, password:hashedPassword };
+  const newUser = { firstName, lastName, username, password:hashedPassword, googleId:"", };
 }); 
 
   try {

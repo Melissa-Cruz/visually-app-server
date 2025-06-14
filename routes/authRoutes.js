@@ -6,10 +6,16 @@ const {
   logout,
   localLogin,
 } = require("../controllers/authController");
+const passport = require("passport");
 
 router.post("/register", register);
 
-router.get("/login", login);
+router.post("/login", 
+    passport.authenticate("local",{
+        failureRedirect:"/login/error",
+        failureMessage:true,
+    }),
+login);
 
 router.get("/login/error", (req, res, next) => {
   return res.json("login error");
@@ -23,5 +29,19 @@ router.get("/unauthenticated", (req, res, next) => {
   console.log("Returning to the homepage...");
   response.redirect("/");
 });
+
+//Google authentication
+router.get(
+  "/login/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/login",
+    successRedirect: "/dashboard",
+  })
+);
 
 module.exports = router;
