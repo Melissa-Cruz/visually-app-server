@@ -1,26 +1,83 @@
+const passport = require("passport");
+const bcrypt = require("bcrypt");
+const User = require("../models/userModel");
+
 const register = async (req, res, next) => {
   const { firstName, lastName, username, password } = req.body;
   console.log("register");
 
+  if(error){
+    return next(error);
+  }else if(!firstName ||username||!password){
+    return response.status(400).json({
+        error:{message:"Missing required fields."},
+        statusCode:400,
+    })
+  };
+
+  bcrypt.hash(password, 10, async(error,hashedPassword)=>{
+    if(error){
+        return next(error)
+    }
+  
+
+  const newUser = { firstName, lastName, username, password:hashedPassword };
+}); 
+
   try {
-    const newUser = { firstName, lastName, username, password };
-    console.log(
-      "Registration is successful outside of local authentication feature."
-    );
-    return res.status(201).json({
+    await newUser.save();
+    
+    req.login(newUser,(error) =>{
+        if(err){
+            return next(error);
+        }
+        newUser.password = undefined;
+
+        return res.status(201).json({
       success: { message: "New user is created" },
       data: { newUser },
       statusCode: 201,
+    }); 
+
+
     });
+
+   
   } catch (error) {
-    return res.status(500).json({
-      success: { error: "Internal server error" },
-      statusCode: 500,
-    });
-  }
+    return next(error)
+
+
+//     if(err.code === 11000 && err.keyPattern.username){
+//         return res.status(400).json({
+//             error:{message: "Username already exists."}, 
+//             statusCode:400,
+//         });
+//     }else{
+        
+  
+//     return res.status(500).json({
+//       success: { error: "Internal server error" },
+//       statusCode: 500,
+//     });
+//   }
+
+}
 };
 
 const login = async (req, res, next) => {
+// passwords should be compared ... I don't think I did this because I don't see it
+
+    const {username, password} = req.body; 
+
+    bcrypt.compare(password, user.password, (err, result) =>{
+        //result == true; 
+        if (error){
+            return done(error);
+        }
+        return done(null,user);
+    }); 
+
+
   return res.status(200).json({
     success: { message: "User logged in." },
     statusCode: 200,
@@ -30,39 +87,60 @@ const login = async (req, res, next) => {
 const logout = async (req, res, next) => {
   console.log("Initializing logout controller logic");
 
+  req.session.destroy((err)=>{
+        if (err) {
+      return next(err);
+    }
+  });
   console.log("session destroyed");
+
   res.clearCookie("connect.sid");
 
   res.status(200).json({
     success: { message: "User logging out" },
     statusCode: 200,
   });
-
-  function sessionDestruction(err) {
-    if (err) {
-      return next(err);
-    }
-  }
-
-  sessionDestruction();
   console.log("Logout function activated. Logging out...");
 };
 
 const localLogin = async (req, res, next) => {
-  let result = true;
+    //make a copy of the user, then change the password of the copy. MongoDB by default will not send any undefined values in the response. 
+    const userCopy = {...req.user._doc }; 
+    userCopy.password = undefined; 
 
-  function mockPassport(err, user) {
-    if (err) {
-      return next(err);
+    //refactoring: tell passport to authenticate the "local" login by targeting the user, 
+
+    passport.authenticate("local", (err, user, info) =>{
+        if (err) {
+        return next(err);
     }
-  }
-  mockPassport();
+    // if no user detected 
+    if(!user){
+        return response.status(401).json({
+            error:{message: "There is not a user detected. Please try again"}
+        });
+    }
+    //use the login method to confirm the user 
+    request.login(user, (err) =>{
+        if(err){
+            return next(err)
+        }
 
-  res.status(200).json({
-    success: { message: "Login successful." },
-    data: { result: result },
-    statusCode: 200,
-  });
+        const userCopy = { ...req.user._doc}; 
+        userCopy.password = undefined;
+
+        console.log(userCopy);
+
+        response.status(200).json({
+            success:{message: "Login successful within local authentication feature."}, 
+            data: {user:userCopy},
+            statusCode:200, 
+        });
+    })
+
+
+
+}
 };
 
 module.exports = { register, login, logout, localLogin };

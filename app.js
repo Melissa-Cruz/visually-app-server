@@ -2,17 +2,30 @@ require("dotenv").config();
 require("./config/connection");
 require("./config/authStrategy");
 
+
+//make a comment that says session and passport here 
+const session = require("express-session");
+const passport = require("passport");
+
+//-----------Move routes before the app initialization ---------------
+//-----------Get the Routes------
+const timelineRoutes = require("./routes/timelineRoutes");
+const authRoutes = require("./routes/authRoutes");
+
+
 // --------------------Initialize Express---------------
 //require dependencies and set up express environment
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+
 // --------------------Middleware------------------------
 //require dependencies
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
+const passport = require("passport"); //not sure if this is right
 
 //require path after the dependencies
 const path = require("node:path");
@@ -27,10 +40,36 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname + "public")));
 
+//make a comment that says session management 
 
-//----------------------Get the Routes-------------------
-const timelineRoutes = require("./routes/timelineRoutes");
-const authRoutes = require("./routes/authRoutes");
+//Session management login, signup, logout
+
+app.use(
+    session({
+        resave:false,
+        saveUninitialized:false,
+        secret:process.env.SECRET_KEY, 
+
+
+        cookie:{
+            httpOnly: true, 
+            secure:false,
+            maxAge:1000*60*60*25, 
+
+        }
+    })
+); 
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+
+
+
+
+
 //Use the  Routes
 app.use("/api/timelines",timelineRoutes );
 app.use ("/api", authRoutes);
