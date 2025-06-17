@@ -34,7 +34,7 @@ app.use(helmet());
 app.use(morgan("combined"));
 app.use(cors({credentials:true}));
 
-//Google what everything means again
+//put more notes
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname + "public")));
@@ -53,7 +53,7 @@ app.use(
         cookie:{
             httpOnly: true, 
             secure:false,
-            maxAge:1000*60*60*25, 
+            maxAge:1000*60*60*24, 
 
         }
     })
@@ -71,7 +71,7 @@ app.use(passport.session());
 
 //Use the  Routes
 app.use("/api/timelines",timelineRoutes );
-app.use ("/api", authRoutes);
+app.use ("/auth", authRoutes);
 
 //Create six basic GET routes with the following information using the
 
