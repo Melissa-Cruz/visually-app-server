@@ -30,14 +30,19 @@ const cors = require("cors");
 const path = require("node:path");
 
 //use the packages
-app.use(helmet());
+app.use(helmet(helmet.contentSecurityPolicy:false));
 app.use(morgan("combined"));
 app.use(cors({credentials:true}));
 
 //put more notes
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname + "public")));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//Use the  Routes
+app.use("/api/timelines",timelineRoutes );
+app.use ("/auth", authRoutes);
+
 
 //make a comment that says session management 
 
@@ -65,21 +70,12 @@ app.use(passport.session());
 
 
 
-
-
-
-
-//Use the  Routes
-app.use("/api/timelines",timelineRoutes );
-app.use ("/auth", authRoutes);
-
-//Create six basic GET routes with the following information using the
-
 // const timelines = require("./models/timelineModel"); 
 
 app.get("/", (req, res, next) => {
   res.status(200).json({
     success: { message: "This route points to the Home page.Yay" },
+    statusCode: 200,
     // data: timelines,
   });
 });

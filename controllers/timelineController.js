@@ -33,7 +33,8 @@ const getTimeline = async (req, res, next) => {
         throw new Error("ID is required");
     }
 
-    const timeline= await Timeline.findById(_id);
+    // const timeline= await Timeline.findById(_id);
+    const timeline=await Timeline.findById(req.params._id);
     console.log(timeline);
     if(!timeline){
         throw new Error("Timeline is not found");

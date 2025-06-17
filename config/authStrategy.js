@@ -37,18 +37,6 @@ passport.use(
 )
 
 
-passport.serializeUser((user, done)=>{
-    done(null,user._id);
-});
-
-passport.deserializeUser(async (id, done)=>{
-    try{
-        const user = await User.findById(id); 
-        done(null, user);
-    }catch(error){
-        done(error)
-    }
-});
 
 
 
@@ -110,4 +98,4 @@ passport.deserializeUser(async(id,done)=>{
     }catch(error){
         done(error);
     }
-})
+});
