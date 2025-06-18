@@ -2,6 +2,13 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 
+const login =  async (req, res, next) =>{
+  res.status(200).json({
+    success:{message:"User logged in."}, 
+    statusCode:200,
+  });
+};
+
 const register = async (req, res, next) => {
   console.log("register");
 
@@ -65,12 +72,7 @@ const register = async (req, res, next) => {
 //   });
 // };
 
-const login =  async (req, res, next) =>{
-  res.status(200).json({
-    success:{message:"User logged in."}, 
-    statusCode:200,
-  });
-};
+
 
 
 const logout = async (req, res, next) => {

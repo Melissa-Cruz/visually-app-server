@@ -30,7 +30,7 @@ const cors = require("cors");
 const path = require("node:path");
 
 //use the packages
-app.use(helmet(helmet.contentSecurityPolicy:false));
+app.use(helmet({contentSecurityPolicy:false}));
 app.use(morgan("combined"));
 app.use(cors({credentials:true}));
 
