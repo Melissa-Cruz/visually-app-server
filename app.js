@@ -32,7 +32,7 @@ const path = require("node:path");
 //use the packages
 app.use(helmet({contentSecurityPolicy:false}));
 app.use(morgan("combined"));
-app.use(cors({credentials:true}));
+app.use(cors({credentials:true, origin:true}));
 
 //put more notes
 app.use(express.static(path.join(__dirname + "public")));
