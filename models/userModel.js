@@ -13,6 +13,13 @@ const userSchema = new Schema(
         required:true, 
         trim:true, 
     }, 
+    emailAddress:{
+        type:String, 
+        required:true,
+        trim:true,
+        unique:true,
+    },
+
     username:{
         type:String,
         required:true,

@@ -12,11 +12,11 @@ const login =  async (req, res, next) =>{
 const register = async (req, res, next) => {
   console.log("register");
 
-  const { firstName, lastName, username, password, googleId, githubId } = req.body;
+  const { firstName, lastName,emailAddress, username, password, googleId, githubId } = req.body;
   console.log(req.body)
 
 
- if (!firstName || !username || !password) {
+ if (!firstName || !username || !password ||!emailAddress) {
     return res.status(400).json({
       error: { message: "Missing required fields." },
       statusCode: 400,
@@ -28,6 +28,7 @@ const register = async (req, res, next) => {
     const newUser = new User({
       firstName,
       lastName,
+      emailAddress,
       username,
       password: hashedPassword,
       googleId: "",
