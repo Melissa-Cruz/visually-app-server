@@ -2,26 +2,33 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 
-const login =  async (req, res, next) =>{
+const login = async (req, res, next) => {
   res.status(200).json({
-    success:{message:"User logged in."}, 
-    statusCode:200,
+    success: { message: "User logged in." },
+    statusCode: 200,
   });
 };
 
 const register = async (req, res, next) => {
   console.log("register");
 
-  const { firstName, lastName,emailAddress, username, password, googleId, githubId } = req.body;
-  console.log(req.body)
+  const {
+    firstName,
+    lastName,
+    emailAddress,
+    username,
+    password,
+    googleId,
+    githubId,
+  } = req.body;
+  console.log(req.body);
 
-
- if (!firstName || !username || !password ||!emailAddress) {
+  if (!firstName || !username || !password || !emailAddress) {
     return res.status(400).json({
       error: { message: "Missing required fields." },
       statusCode: 400,
     });
-  };
+  }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -73,31 +80,27 @@ const register = async (req, res, next) => {
 //   });
 // };
 
-
-
-
 const logout = async (req, res, next) => {
   console.log("Initializing logout controller logic");
-  req.logout((error)=>{
-    if(error){
+  req.logout((error) => {
+    if (error) {
       return next(error);
     }
 
-  req.session.destroy((error)=>{
-    if(error){
-      return next(error);
-    }
+    req.session.destroy((error) => {
+      if (error) {
+        return next(error);
+      }
+    });
+
+    console.log("Session destroyed");
+
+    res.clearCookie("connect.sid");
+    return res.status(200).json({
+      success: { message: "User logged out" },
+      statusCode: 200,
+    });
   });
-
-  console.log("Session destroyed"); 
-
-  res.clearCookie("connect.sid");
-  return res.status(200).json({
-    success:{message:"User logged out"}, 
-    statusCode:200,
-  });
-  })
-
 };
 
 const localLogin = async (req, res, next) => {
@@ -129,7 +132,7 @@ const localLogin = async (req, res, next) => {
 
       console.log(userCopy);
 
-    res.status(200).json({
+      res.status(200).json({
         success: {
           message: "Login successful within local authentication feature.",
         },
@@ -137,7 +140,7 @@ const localLogin = async (req, res, next) => {
         statusCode: 200,
       });
     });
-  });
+  })(req, res, next);
 };
 
 module.exports = { register, login, logout, localLogin };
