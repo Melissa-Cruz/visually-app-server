@@ -27,12 +27,12 @@ const cors = require("cors");
 const path = require("node:path");
 
 //use the packages
-app.use(helmet());
-// app.use(helmet({ contentSecurityPolicy: false }));
+// app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(morgan("combined"));
-app.use(cors());
-// app.use(cors({credentials:true, origin:true}));
+// app.use(cors());
+app.use(cors({credentials:true, origin:true}));
 
 //put more notes
 app.use(express.static(path.join(__dirname + "public")));
