@@ -65,6 +65,13 @@ app.use(passport.session());
 app.use("/api/timelines", timelineRoutes);
 app.use("/auth", authRoutes);
 
+
+//Adding this in based on error with adding google authentication to client side 
+app.use((req,res,next)=>{
+  res.setHeader('Access-Control-Allow-Origin', 'https://visuallygoals.netlify.app'); //if i use * instead of domain it'd
+  next();
+});
+
 app.get("/", (req, res, next) => {
   res.status(200).json({
     success: { message: "This route points to the Home page.Yay" },
