@@ -11,8 +11,6 @@ This project has the back-end code for our personal project. The goal of the pro
 The client side is deployed with Netlify and the server side with Render. 
 
 ### Future Tasks 
- - adjusting the sizing
- - changing the layout to a traditional asthetic
  - updating the form content
  - fixing the user login
  - rendering user entries 
